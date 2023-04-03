@@ -1,17 +1,25 @@
-<div id="myNav" class="overlay">
-
-  <!-- Button to close the overlay navigation -->
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-
-  <!-- Overlay content -->
-  <div class="overlay-content">
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-    <a href="#">Contact</a>
-  </div>
-
-</div>
-
-<!-- Use any element to open/show the overlay navigation menu -->
-<span onclick="openNav()">open</span>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Maori Dictionary</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <nav>
+      <button class="nav-toggle">&#9776;</button>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Login</a></li>
+        <li><a href="#">Info</a></li>
+        <li><a href="#">Admin</a></li>
+      </ul>
+    </nav>
+    <div class="search-container">
+      <h1>Maori Dictionary</h1>
+      <form>
+        <input type="text" placeholder="Search...">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  </body>
+</html>
