@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Dictionary" uuid="aeed24b4-82d7-4a95-a149-ca070f0169fb">
+    <data-source source="LOCAL" name="TeReo" uuid="c4998f45-ef8c-425f-b823-078bdc416650">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:Dictionary</jdbc-url>
+      <jdbc-url>jdbc:sqlite:TeReo</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
