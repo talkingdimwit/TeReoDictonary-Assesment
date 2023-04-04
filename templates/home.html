@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Maori Dictionary</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <nav>
-      <button class="nav-toggle">&#9776;</button>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Login</a></li>
-        <li><a href="#">Info</a></li>
-        <li><a href="#">Admin</a></li>
-      </ul>
-    </nav>
-    <div class="search-container">
-      <h1>Maori Dictionary</h1>
-      <form>
-        <input type="text" placeholder="Search...">
-        <button type="submit">Search</button>
-      </form>
-    </div>
-  </body>
+<head>
+	<title>Maori Dictionary</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='smile.css') }}" rel="stylesheet">
+</head>
+<body>
+	<button onclick="openNav()">☰</button>
+
+	<div class="navigation-container" id="myNav">
+		<button onclick="closeNav()">×</button>
+		<a href="/">Home</a>
+		<a href="#">category</a>
+		<a href="#">login</a>
+		<a href="#">info</a>
+	</div>
+
+	<div class="search-container">
+		<div class="search-box">
+			<input type="text" placeholder="Search...">
+			<button>Search</button>
+		</div>
+	</div>
+
+	<script>
+		function openNav() {
+			document.getElementById("myNav").classList.add("show");
+		}
+
+		function closeNav() {
+			document.getElementById("myNav").classList.remove("show");
+		}
+	</script>
+</body>
 </html>
