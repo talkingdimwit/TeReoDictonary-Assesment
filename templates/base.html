@@ -8,26 +8,31 @@
 </head>
 
 <body>
-	<button onclick="openNav()">☰</button>
+	<button class="nav-button" onclick="openNav()">☰</button>
 
 	<div class="navigation-container" id="myNav">
 		<button onclick="closeNav()">×</button>
 		<a href="/">Home</a>
-		<a href="#">category</a>
-		<a href="#">login</a>
-		<a href="#">info</a>
+		<a href="#">Category</a>
+		<a href="#">Login</a>
+		<a href="#">Info</a>
+
+        <script>
+            function openNav() {
+                document.getElementById("myNav").classList.add("show");
+            }
+
+            function closeNav() {
+                document.getElementById("myNav").classList.remove("show");
+            }
+	    </script>
 	</div>
 
     <div class="container">
-    <header>
-        <h1>smile</h1>
-        <h2>{% block pageheading %}{% endblock %}</h2>
-    </header>
-
     <main>
         {% block main %}
         {% endblock %}
     </main>
-</div>
+    </div>
 </body>
 </html>

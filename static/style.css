@@ -33,8 +33,10 @@
 			background-color: #4CAF50;
 			color: white;
 			border: none;
-			padding: 10px;
-			border-radius: 10px;
+			padding: 0px;
+			height: 40px;
+			width: 40px;
+			border-radius: 100px;
 			cursor: pointer;
 			font-size: 18px;
 			margin-left: 10px;
@@ -62,7 +64,8 @@
 			color: white;
 			text-decoration: none;
 			margin: 0 10px;
-			font-size: 24px;
+			font-size: 50px;
+			padding: 10px;
 		}
 
 		.navigation-container.show {
@@ -82,6 +85,22 @@
 			background-color: transparent;
 			color: white;
 			border: none;
-			font-size: 32px;
+			font-size: 50px;
 			cursor: pointer;
+		}
+
+		.nav-button {
+			position: absolute;
+			top: 20px;
+			right: 1820px;
+			background-color: transparent;
+			color: black;
+			border: none;
+			font-size: 50px;
+			cursor: pointer;
+		}
+
+		.container h1 {
+			position: fixed;
+			text-align: center;
 		}
