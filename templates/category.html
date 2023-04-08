@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+{% extends "base.html" %}
+{% block main %}
+    <div class="words">
+        {% for word in definitions %}
+        <div class="word-box">
+            <div class="word-box-heading">
+                <h3>{{ word[0] }}</h3>
+                <h4>{{ word[1] }}</h4>
+
+            </div>
+            <div class="word-box-definition">
+                <p><strong>Definition:</strong>{{ word[3] }}</p>
+            </div>
+            <div class="word-box-info">
+                <p><strong>category:</strong>{{ word[2] }}</p>
+                <p><strong>level:</strong>{{ word[4] }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

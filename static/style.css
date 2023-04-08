@@ -16,7 +16,7 @@
 			display: flex;
 			align-items: center;
 			border: 1px solid black;
-			padding: 10px;
+			padding: 5px;
 			border-radius: 20px;
 			width: 50%;
 			min-width: 300px;
@@ -27,6 +27,7 @@
 			border: none;
 			padding: 5px;
 			font-size: 18px;
+			outline: none;
 		}
 
 		.search-box button {
@@ -90,9 +91,9 @@
 		}
 
 		.nav-button {
-			position: absolute;
-			top: 20px;
-			right: 1820px;
+			position: sticky;
+			left: 20px;
+			top: 10px;
 			background-color: transparent;
 			color: black;
 			border: none;
