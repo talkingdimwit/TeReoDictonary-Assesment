@@ -3,12 +3,12 @@
 {% extends "base.html" %}
 {% block main %}
 	<div class="search-container">
-		<div class="search-box">
-			<input type="text" placeholder="Search...">
-			<button>🔍︎</button>
-		</div>
-
-
+        <div class="search-box" method="POST" action="/search">
+            <form class="search-submit" method="POST" action="/search">
+                <input type="text" name="search" id="search" placeholder="Search...">
+                <input type="submit" value="🔍︎">
+            </form>
+        </div>
 	</div>
 
 

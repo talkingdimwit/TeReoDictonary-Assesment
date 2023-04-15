@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+{% extends "base.html" %}
+{% block main %}
+    <div class="category-menu">
+        <li><a href="/words">All Words</a></li>
+    {% for category in categories %}
+        <li><a href="/words/{{ category[1] }}">{{ category[1] }}</a></li>
+    {% endfor %}
+    </div>
+    <h2>All Words</h2>
+    <table>
+        <thead>
+        <td>maori</td>
+        <td>english</td>
+        <td>category</td>
+        <td>definition</td>
+        <td>level</td>
+        </thead>
+        <tbody>
+        {% for words in definitions %}
+            <tr>
+                <td>{{ words[0] }}</td>
+                <td>{{ words[1] }}</td>
+                <td>{{ words[2] }}</td>
+                <td>{{ words[3] }}</td>
+                <td>{{ words[4] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
