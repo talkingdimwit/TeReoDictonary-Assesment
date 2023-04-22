@@ -35,7 +35,7 @@ def render_search():
     definition_list = cur.fetchall()
     con.close()
     print(definition_list)
-    return render_template('search.html', definintions=definition_list)
+    return render_template('search.html', definitions=definition_list)
 
 @app.route('/words')
 def render_words():  # put application's code here
