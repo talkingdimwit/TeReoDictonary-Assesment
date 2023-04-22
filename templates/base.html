@@ -14,8 +14,12 @@
 		<button onclick="closeNav()">×</button>
 		<a href="/">Home</a>
 		<a href="/words">Category</a>
-		<a href="/login">Login</a>
-		<a href="#">Info</a>
+		{% if logged_in %}
+            <a href="/logout">logout</a>
+            <a href="/admin">admin</a>
+        {% else %}
+            <a href="/login">login</a>
+        {% endif %}
 
         <script>
             function openNav() {
