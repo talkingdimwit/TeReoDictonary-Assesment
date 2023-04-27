@@ -155,5 +155,17 @@ def logout():
     print(list(session.keys()))
     return redirect('/?message=see+you+next+time!')
 
+@app.route('/admin')
+def admin():
+    if not is_logged_in():
+        return redirect('/?message=need+to+be+logged+in')
+    con = create_connection(DATABASE)
+    query = "SELECT id, category FROM categories"
+    cur = con.cursor()
+    cur.execute(query)
+    definition_list = cur.fetchall()
+    con.close()
+    return render_template("admin.html", logged_in=is_logged_in(), definitions=definition_list)
+
 if __name__ == '__main__':
     app.run()
