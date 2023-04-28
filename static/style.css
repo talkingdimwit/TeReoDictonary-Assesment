@@ -2,6 +2,7 @@
 			margin: 0;
 			padding: 0;
 			font-family: Arial, sans-serif;
+			background-image: url(images/fern_background.jpg);
 		}
 
 		.search-submit {
@@ -40,6 +41,7 @@
 			border-radius: 20px;
 			width: 50%;
 			min-width: 300px;
+			background-color: white;
 		}
 
 		.search-box input[type="text"] {
@@ -114,14 +116,46 @@
 			position: sticky;
 			left: 20px;
 			top: 10px;
-			background-color: transparent;
+			background-color: #4CAF50;
 			color: black;
 			border: none;
 			font-size: 50px;
+			text-align: center;
 			cursor: pointer;
+			border-radius: 10px;
 		}
 
 		.container h1 {
 			position: fixed;
 			text-align: center;
+		}
+
+		.dictionary-grid {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-evenly;
+		  align-items: stretch;
+			width: calc(33.33% - 10px);
+			float: left;
+		}
+
+		.word-box {
+			width: 90%;
+		  margin-bottom: 20px;
+		  background-color: #eee;
+		  padding: 20px;
+		  border-radius: 5px;
+		  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+			position: center;
+		}
+
+		.category-menu {
+			width: 100%;
+			height: 15px;
+		}
+
+		.categories {
+			float: left;
+			text-align: center;
+			text
 		}

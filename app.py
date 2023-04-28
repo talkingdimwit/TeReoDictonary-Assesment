@@ -175,9 +175,50 @@ def admin():
     query = "SELECT id, category FROM categories"
     cur = con.cursor()
     cur.execute(query)
-    definition_list = cur.fetchall()
+    category_list = cur.fetchall()
     con.close()
-    return render_template("admin.html", logged_in=is_logged_in(), definitions=definition_list, is_teacher=is_teacher())
+    return render_template("admin.html", logged_in=is_logged_in(), categories=category_list, is_teacher=is_teacher())
+
+@app.route('/add_category', methods=['POST'])
+def add_category():
+    if not is_logged_in():
+        return redirect('/?message=need+to+be+logged+in')
+    if request.method == "POST":
+        print(request.form)
+        cat_name = request.form.get('name').lower().strip()
+        print(cat_name)
+        con = create_connection(DATABASE)
+        query = "INSERT INTO categories ('category') VALUES (?)"
+        cur = con.cursor()
+        cur.execute(query, (cat_name, ))
+        con.commit()
+        con.close()
+        return redirect("/admin")
+
+@app.route('/delete_category', methods=['POST'])
+def delete_category():
+    if not is_logged_in():
+        return redirect('/?message=need+to+be+logged+in')
+    if request.method == "POST":
+        category = request.form.get('cat_id')
+        print(category)
+        category = category.split(", ")
+        cat_id = category[0]
+        cat_name = category[1]
+        return render_template("delete_confirm.html", id=cat_id, name=cat_name, type="category")
+    return redirect("/admin")
+
+@app.route('/delete_category_confirm/<category>')
+def delete_category_confirm(category):
+    if not is_logged_in():
+        return redirect('/?message=need+to+be+logged+in')
+    con = create_connection(DATABASE)
+    query = "DELETE FROM categories WHERE id = ?"
+    cur = con.cursor()
+    cur.execute(query, (category, ))
+    con.commit()
+    con.close()
+    return redirect("/admin")
 
 if __name__ == '__main__':
     app.run()
