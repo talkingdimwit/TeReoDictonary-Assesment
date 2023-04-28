@@ -16,7 +16,11 @@
 		<a href="/words">Category</a>
 		{% if logged_in %}
             <a href="/logout">logout</a>
-            <a href="/admin">admin</a>
+            {% if is_teacher %}
+                <a href="/admin">admin</a>
+            {% else %}
+                <a href="/student">student</a>
+            {% endif %}
         {% else %}
             <a href="/login">login</a>
         {% endif %}

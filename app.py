@@ -17,6 +17,14 @@ def is_logged_in():
         print("logged in")
         return True
 
+def is_teacher():
+    if session.get("permissions") == "teacher":
+        print("is teacher")
+        return True
+    else:
+        print("is not teacher")
+        return False
+
 def create_connection(db_file):
     """
     create a connection with a database
@@ -33,7 +41,9 @@ def create_connection(db_file):
 
 @app.route('/')
 def render_homepage():  # put application's code here
-    return render_template('home.html', logged_in=is_logged_in())
+    if is_teacher():
+        print("is teacher")
+    return render_template('home.html', logged_in=is_logged_in(), is_teacher=is_teacher())
 
 @app.route('/search', methods=['GET', 'POST'])
 def render_search():
@@ -46,7 +56,7 @@ def render_search():
     definition_list = cur.fetchall()
     con.close()
     print(definition_list)
-    return render_template('search.html', logged_in=is_logged_in(), definitions=definition_list)
+    return render_template('search.html', logged_in=is_logged_in(), definitions=definition_list, is_teacher=is_teacher())
 
 @app.route('/words')
 def render_words():  # put application's code here
@@ -61,7 +71,7 @@ def render_words():  # put application's code here
     category_list = cur.fetchall()
     con.close()
     print(definition_list)
-    return render_template('words.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list)
+    return render_template('words.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
 
 @app.route('/words/<category>')
 def render_words_category(category):  # put application's code here
@@ -76,7 +86,7 @@ def render_words_category(category):  # put application's code here
     category_list = cur.fetchall()
     con.close()
     print(definition_list)
-    return render_template('words.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list)
+    return render_template('words.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
 
 @app.route('/login', methods=['POST', 'GET'])
 def render_login():  # put application's code here
@@ -87,7 +97,7 @@ def render_login():  # put application's code here
         email = request.form['email'].strip().lower()
         password = request.form['password'].strip()
         print(email)
-        query = """SELECT id, fname, password FROM user WHERE email = ?"""
+        query = """SELECT id, fname, password, permission FROM user WHERE email = ?"""
         con = create_connection(DATABASE)
         cur = con.cursor()
         cur.execute(query, (email,))
@@ -98,6 +108,7 @@ def render_login():  # put application's code here
             user_id = user_data[0]
             first_name = user_data[1]
             db_password = user_data[2]
+            permissions = user_data[3]
         except IndexError:
             return redirect("/login?error=Email+or+invalid+password+incorrect")
 
@@ -107,9 +118,10 @@ def render_login():  # put application's code here
         session['email'] = email
         session['firstname'] = first_name
         session['user_id'] = user_id
+        session['permissions'] = permissions
         print(session)
         return redirect('/')
-    return render_template('login.html')
+    return render_template('login.html', is_teacher=is_teacher())
 
 @app.route('/signup', methods=['POST', 'GET'])
 def render_signup_page():  # put application's code here
@@ -146,7 +158,7 @@ def render_signup_page():  # put application's code here
 
         return redirect("\login")
 
-    return render_template('signup.html', logged_in=is_logged_in())
+    return render_template('signup.html', logged_in=is_logged_in(), is_teacher=is_teacher())
 
 @app.route('/logout')
 def logout():
@@ -165,7 +177,7 @@ def admin():
     cur.execute(query)
     definition_list = cur.fetchall()
     con.close()
-    return render_template("admin.html", logged_in=is_logged_in(), definitions=definition_list)
+    return render_template("admin.html", logged_in=is_logged_in(), definitions=definition_list, is_teacher=is_teacher())
 
 if __name__ == '__main__':
     app.run()
