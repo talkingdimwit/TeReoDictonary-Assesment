@@ -10,25 +10,17 @@
             </form>
         </div>
 	</div>
-    <h2>search</h2>
-    <table>
-        <thead>
-        <td>maori</td>
-        <td>english</td>
-        <td>category</td>
-        <td>definition</td>
-        <td>level</td>
-        </thead>
-        <tbody>
+    <div class="definitions">
         {% for words in definitions %}
-            <tr>
-                <td>{{ words[0] }}</td>
-                <td>{{ words[1] }}</td>
-                <td>{{ words[2] }}</td>
-                <td>{{ words[3] }}</td>
-                <td>{{ words[4] }}</td>
-            </tr>
+            <div class="dictionary-grid">
+                <div class="word-box">
+                    <h2 class="maori-word">{{ words[0] }}</h2>
+                    <p class="english-word">{{ words[1] }}</p>
+                    <p class="category">{{ words[2] }}</p>
+                    <p class="definition">{{ words[3] }}</p>
+                    <p class="year-level">{{ words[4] }}</p>
+                </div>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
+    </div>
 {% endblock %}

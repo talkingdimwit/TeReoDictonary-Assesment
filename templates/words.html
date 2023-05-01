@@ -8,17 +8,17 @@
         <p class="categories"><a href="/words/{{ category[1] }}">{{ category[1] }} </a></p>
     {% endfor %}
     </div>
-    <h2>All Words</h2>
-    {% for words in definitions %}
-        <div class="dictionary-grid">
-            <div class="word-box">
-                <h2 class="maori-word">{{ words[1] }}</h2>
-                <p class="english-word">{{ words[2] }}</p>
-                <p class="category">{{ words[3] }}</p>
-                <p class="definition">{{ words[4] }}</p>
-                <p class="year-level">{{ words[5] }}</p>
+    <div class="definitions">
+        {% for words in definitions %}
+            <div class="dictionary-grid">
+                <div class="word-box">
+                    <h2 class="maori-word">{{ words[0] }}</h2>
+                    <p class="english-word">{{ words[1] }}</p>
+                    <p class="category">{{ words[2] }}</p>
+                    <p class="definition">{{ words[3] }}</p>
+                    <p class="year-level">{{ words[4] }}</p>
+                </div>
             </div>
-        </div>
-    {% endfor %}
-
+        {% endfor %}
+    </div>
 {% endblock %}
