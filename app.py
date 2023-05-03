@@ -134,7 +134,14 @@ def render_signup_page():  # put application's code here
         email = request.form.get("email").lower().strip()
         password = request.form.get('password')
         password2 = request.form.get('password2')
+        permission = request.form.get('code')
 
+        if permission == '1111':
+            permission == 'teacher'
+        elif permission == '':
+            permission == 'student'
+        else:
+            return redirect("\signup?error=Teacher+code+inncorrect")
 
         if password != password2:
             return redirect("\signup?error=Password+do+not+match")
@@ -144,11 +151,11 @@ def render_signup_page():  # put application's code here
 
         hashed_password = bcrypt.generate_password_hash(password)
         con = create_connection(DATABASE)
-        query = "INSERT INTO user (fname, lname, email, password) VALUES (?, ?, ?, ?)"
+        query = "INSERT INTO user (fname, lname, email, password, permission) VALUES (?, ?, ?, ?, ?)"
         cur = con.cursor()
 
         try:
-            cur.execute(query, (fname, lname, email, hashed_password))
+            cur.execute(query, (fname, lname, email, hashed_password, permission))
         except sqlite3.IntegrityError:
             con.close
             return redirect("\signup?error=Email+is+already+used")
