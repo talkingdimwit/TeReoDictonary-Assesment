@@ -137,9 +137,9 @@ def render_signup_page():  # put application's code here
         permission = request.form.get('code')
 
         if permission == '1111':
-            permission == 'teacher'
+            permission = 'teacher'
         elif permission == '':
-            permission == 'student'
+            permission = 'student'
         else:
             return redirect("\signup?error=Teacher+code+inncorrect")
 
