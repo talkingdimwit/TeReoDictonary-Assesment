@@ -103,7 +103,7 @@ def render_words_maori(maori):  # put application's code here
     category_list = cur.fetchall()
     con.close()
     print(definition_list)
-    return render_template('words.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
+    return render_template('maori.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
 
 @app.route('/login', methods=['POST', 'GET'])
 def render_login():  # put application's code here

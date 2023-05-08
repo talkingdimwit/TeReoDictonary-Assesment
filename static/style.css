@@ -146,14 +146,26 @@
 
 		.word-box {
 			width: 90%;
-		  margin-bottom: 20px;
-		  background-color: #eee;
-		  padding: 20px;
-		  border-radius: 5px;
-		  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+			margin-bottom: 20px;
+			background-color: #eee;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 			position: center;
 		}
 
+		.single-word-box {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 90%;
+			height: 60%;
+			transform: translate(-50%, -50%);
+			background-color: #eee;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+		}
 
 		.category-menu {
 			width: 100%;
@@ -189,7 +201,7 @@
 		  position: absolute;
 		  top: 50%;
 		  left: 50%;
-		  margin: -150px 0 0 -150px;
+		  transform: translate(-50%, -50%);
 			border-radius: 5px;
 		}
 

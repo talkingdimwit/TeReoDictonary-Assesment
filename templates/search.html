@@ -14,7 +14,7 @@
         {% for words in definitions %}
             <div class="dictionary-grid">
                 <div class="word-box">
-                    <h2 class="maori-word">{{ words[0] }}</h2>
+                    <h2 class="maori-word"><a href="/{{ words[0] }}">{{ words[0] }}</a></h2>
                     <p class="english-word">{{ words[1] }}</p>
                     <p class="category">{{ words[2] }}</p>
                     <p class="definition">{{ words[3] }}</p>
