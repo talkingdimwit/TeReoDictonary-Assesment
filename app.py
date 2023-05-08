@@ -3,8 +3,9 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-DATABASE = 'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
-#"C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
+DATABASE = "C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
+#'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
+#
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -80,6 +81,21 @@ def render_words_category(category):  # put application's code here
     query = "SELECT maori, english, category, definition, level FROM Dictionary WHERE category=?"
     cur = con.cursor()
     cur.execute(query, (category, ))
+    definition_list = cur.fetchall()
+    query = "SELECT id, category FROM categories"
+    cur = con.cursor()
+    cur.execute(query)
+    category_list = cur.fetchall()
+    con.close()
+    print(definition_list)
+    return render_template('words.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
+
+@app.route('/<maori>')
+def render_words_maori(maori):  # put application's code here
+    con = create_connection(DATABASE)
+    query = "SELECT maori, english, category, definition, level FROM Dictionary WHERE maori=?"
+    cur = con.cursor()
+    cur.execute(query, (maori, ))
     definition_list = cur.fetchall()
     query = "SELECT id, category FROM categories"
     cur = con.cursor()
