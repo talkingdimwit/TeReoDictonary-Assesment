@@ -10,11 +10,14 @@
     </div>
     {% for words in definitions %}
                 <div class="single-word-box">
-                        <h2 class="maori-word"><a href="/{{ words[0] }}">{{ words[0] }}</a></h2>
-                        <p class="english-word">{{ words[1] }}</p>
-                        <p class="category">{{ words[2] }}</p>
-                        <p class="definition">{{ words[3] }}</p>
-                        <p class="year-level">{{ words[4] }}</p>
+                    <h2 class="maori-word"><a href="/{{ words[0] }}">{{ words[0] }}</a></h2>
+                    <p class="english-word">{{ words[1] }}</p>
+                    <p class="category">{{ words[2] }}</p>
+                    <p class="definition">{{ words[3] }}</p>
+                    <p class="year-level">{{ words[4] }}</p>
+                    <div class="word-image">
+                        <img src="static/images/noImage.jpg" height="100%" width="100%">
+                    </div>
                 </div>
     {% endfor %}
 {% endblock %}
