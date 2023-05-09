@@ -10,11 +10,7 @@
     </div>
     {% for words in definitions %}
                 <div class="single-word-box">
-                    {% if is_teacher %}
-                    <h2 class="maori-word">{{ words[0] }} <a href="/{{ words[0] }}/admin">admin</a> </h2>
-                    {% else %}
-                    <h2 class="maori-word">{{ words[0] }}</h2>
-                    {% endif %}
+                    <h2 class="maori-word">{{ words[0] }} <a href="/delete_word">delete word</a> </h2>
                     <p class="english-word">{{ words[1] }}</p>
                     <p class="category">{{ words[2] }}</p>
                     <p class="definition">{{ words[3] }}</p>

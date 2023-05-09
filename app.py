@@ -3,9 +3,9 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-DATABASE = 'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
+DATABASE = "C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
+#'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
 #
-#"C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -104,6 +104,21 @@ def render_words_maori(maori):  # put application's code here
     con.close()
     print(definition_list)
     return render_template('maori.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
+
+@app.route('/<maori>/admin')
+def render_words_maori_admin(maori):  # put application's code here
+    con = create_connection(DATABASE)
+    query = "SELECT maori, english, category, definition, level FROM Dictionary WHERE maori=?"
+    cur = con.cursor()
+    cur.execute(query, (maori, ))
+    definition_list = cur.fetchall()
+    query = "SELECT id, category FROM categories"
+    cur = con.cursor()
+    cur.execute(query)
+    category_list = cur.fetchall()
+    con.close()
+    print(definition_list)
+    return render_template('maori_admin.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
 
 @app.route('/login', methods=['POST', 'GET'])
 def render_login():  # put application's code here
@@ -219,8 +234,8 @@ def add_category():
         con.close()
         return redirect("/admin")
 
-@app.route('/delete_category', methods=['POST'])
-def delete_category():
+@app.route('/delete_word', methods=['POST'])
+def delete_word():
     if not is_logged_in():
         return redirect('/?message=need+to+be+logged+in')
     if request.method == "POST":
@@ -232,8 +247,8 @@ def delete_category():
         return render_template("delete_confirm.html", id=cat_id, name=cat_name, type="category")
     return redirect("/admin")
 
-@app.route('/delete_category_confirm/<category>')
-def delete_category_confirm(category):
+@app.route('/delete_word_confirm/<category>')
+def delete_word_confirm(category):
     if not is_logged_in():
         return redirect('/?message=need+to+be+logged+in')
     con = create_connection(DATABASE)
