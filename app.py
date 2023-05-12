@@ -3,9 +3,9 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-DATABASE = "C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
-#'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
+DATABASE = 'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
 #
+#"C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
