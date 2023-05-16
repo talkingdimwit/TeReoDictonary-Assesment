@@ -234,27 +234,29 @@ def add_category():
         con.close()
         return redirect("/admin")
 
-@app.route('/delete_word', methods=['POST'])
-def delete_word():
+@app.route('/delete_word/<id>', methods=['POST'])
+def delete_word(id):
     if not is_logged_in():
         return redirect('/?message=need+to+be+logged+in')
     if request.method == "POST":
-        category = request.form.get('cat_id')
-        print(category)
-        category = category.split(", ")
-        cat_id = category[0]
-        cat_name = category[1]
-        return render_template("delete_confirm.html", id=cat_id, name=cat_name, type="category")
+        con = create_connection(DATABASE)
+        query = "SELECT id, Maori FROM Dictionary WHERE id=?"
+        cur = con.cursor()
+        cur.execute(query, (id,))
+        word = cur.fetchall()
+        con.close()
+        print(word)
+        return render_template("delete_confirm.html", word=word)
     return redirect("/admin")
 
-@app.route('/delete_word_confirm/<category>')
-def delete_word_confirm(category):
+@app.route('/delete_word_confirm/<id>')
+def delete_word_confirm(id):
     if not is_logged_in():
         return redirect('/?message=need+to+be+logged+in')
     con = create_connection(DATABASE)
-    query = "DELETE FROM categories WHERE id = ?"
+    query = "DELETE FROM Dictionary WHERE id = ?"
     cur = con.cursor()
-    cur.execute(query, (category, ))
+    cur.execute(query, (id, ))
     con.commit()
     con.close()
     return redirect("/admin")
