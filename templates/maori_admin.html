@@ -11,7 +11,7 @@
     {% for words in definitions %}
                 <form class="myform" method="post" id="word" action="/delete_word/{{ words[0] }}">
                 <div class="single-word-box">
-                    <h2 class="maori-word"><option value="{{ words[1] }}">{{ words[1] }}</option><div class="form-element"><input type="submit" value="Delete Word"></div> </h2>
+                    <h2 class="maori-word"><option value="{{ words[1] }}">{{ words[0] }}</option><div class="form-element"><input type="submit" value="Delete Word"></div> </h2>
                     <p class="english-word">{{ words[1] }}</p>
                     <p class="category">{{ words[2] }}</p>
                     <p class="definition">{{ words[3] }}</p>

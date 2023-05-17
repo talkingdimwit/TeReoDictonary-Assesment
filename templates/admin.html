@@ -5,15 +5,35 @@
 {% block main %}
 <h3>Category Admin</h3>
 <div class="login-box">
-<h4>add a category</h4>
-<form class="myform" method="post" action="/add_category">
+<h4>add a word</h4>
+<form class="myform" method="post" action="/add_word">
     <div class="login-input">
-        <div class="form-label"><label for="name">Category Name:</label></div>
+        <div class="form-label"><label for="name">Maori Name:</label></div>
+        <div class="form-element"><input type="text" name="name" id="name" required></div>
+    </div>
+    <div class="login-input">
+        <div class="form-label"><label for="name">english Name:</label></div>
+        <div class="form-element"><input type="text" name="name" id="name" required></div>
+    </div>
+    <div class="login-input">
+        <div class="form-label"><label for="name">category:</label></div>
+            <select id="cat_id" name="cat_id">
+                {% for category in categories %}
+                <option value="{{ category[0] }}, {{ category[1] }}">{{ category[1] }}</option>
+                {% endfor %}
+            </select>
+    </div>
+    <div class="login-input">
+        <div class="form-label"><label for="name">definition:</label></div>
+        <div class="form-element"><input type="text" name="name" id="name" required></div>
+    </div>
+    <div class="login-input">
+        <div class="form-label"><label for="name">year level:</label></div>
         <div class="form-element"><input type="text" name="name" id="name" required></div>
     </div>
     <div class="login-input">
         <div class="form-label"></div>
-        <div class="form-element"><input type="submit" value="Add Category"></div>
+        <div class="form-element"><input type="submit" value="Add Word"></div>
     </div>
 </form>
 <h4>Delete a category</h4>

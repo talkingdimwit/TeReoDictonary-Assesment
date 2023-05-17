@@ -234,32 +234,36 @@ def add_category():
         con.close()
         return redirect("/admin")
 
-@app.route('/delete_word/<id>', methods=['POST'])
-def delete_word(id):
+@app.route('/delete_word/<maori>', methods=['POST'])
+def delete_word(maori):
     if not is_logged_in():
         return redirect('/?message=need+to+be+logged+in')
     if request.method == "POST":
+        maori = maori
         con = create_connection(DATABASE)
-        query = "SELECT id, Maori FROM Dictionary WHERE id=?"
+        query = "SELECT id, maori FROM Dictionary WHERE maori=?"
         cur = con.cursor()
-        cur.execute(query, (id,))
+        cur.execute(query, (maori,))
         word = cur.fetchall()
         con.close()
-        print(word)
         return render_template("delete_confirm.html", word=word)
     return redirect("/admin")
 
-@app.route('/delete_word_confirm/<id>')
-def delete_word_confirm(id):
+@app.route('/delete_word_confirm/<maori>')
+def delete_word_confirm(maori):
     if not is_logged_in():
         return redirect('/?message=need+to+be+logged+in')
     con = create_connection(DATABASE)
     query = "DELETE FROM Dictionary WHERE id = ?"
+    temp_word_id = maori[1]
     cur = con.cursor()
-    cur.execute(query, (id, ))
+    cur.execute(query, (temp_word_id, ))
     con.commit()
     con.close()
-    return redirect("/admin")
+    print("below is: word details")
+    print(maori)
+    print(temp_word_id)
+    return redirect("/words")
 
 if __name__ == '__main__':
     app.run()
