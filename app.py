@@ -11,6 +11,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.secret_key = ("deeznutz42069")
 
+#is_logged_in checks if there is an email it can grab to confirm user is logged in
 def is_logged_in():
     if session.get("email") is None:
         print("not logged in")
@@ -19,6 +20,7 @@ def is_logged_in():
         print("logged in")
         return True
 
+#is_teacher checks the account that is logged in permissions to see if it says "teacher"
 def is_teacher():
     if session.get("permissions") == "teacher":
         print("is teacher")
@@ -27,6 +29,7 @@ def is_teacher():
         print("is not teacher")
         return False
 
+#runs connection code for the database
 def create_connection(db_file):
     """
     create a connection with a database
@@ -40,18 +43,20 @@ def create_connection(db_file):
         print(e)
     return None
 
-
+#basic home page
 @app.route('/')
 def render_homepage():  # put application's code here
     if is_teacher():
         print("is teacher")
     return render_template('home.html', logged_in=is_logged_in(), is_teacher=is_teacher())
 
+#after using search bar on home page this runs
 @app.route('/search', methods=['GET', 'POST'])
 def render_search():
-    search = request.form['search']
+    search = request.form['search'] #grabs requested search from user
     query = "SELECT maori, english, category, definition, level FROM Dictionary WHERE maori like ? OR english like ?  OR category like ? OR definition like ?  OR level like ?"
     search = "%" + search + "%"
+    #above is the code checking the database for where is has to look
     con = create_connection(DATABASE)
     cur = con.cursor()
     cur.execute(query, (search, search, search, search, search))
@@ -60,14 +65,15 @@ def render_search():
     print(definition_list)
     return render_template('search.html', logged_in=is_logged_in(), definitions=definition_list, is_teacher=is_teacher())
 
+#page that displays grid of words
 @app.route('/words')
 def render_words():  # put application's code here
     con = create_connection(DATABASE)
-    query = "SELECT maori, english, category, definition, level FROM Dictionary"
+    query = "SELECT maori, english, category, definition, level, editor FROM Dictionary" #grabing word information
     cur = con.cursor()
     cur.execute(query)
     definition_list = cur.fetchall()
-    query = "SELECT id, category FROM categories"
+    query = "SELECT id, category FROM categories" #this is grabing category names off a seperate database for the navbar
     cur = con.cursor()
     cur.execute(query)
     category_list = cur.fetchall()
@@ -75,10 +81,11 @@ def render_words():  # put application's code here
     print(definition_list)
     return render_template('words.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
 
+#displays grid for words in a category only
 @app.route('/words/<category>')
-def render_words_category(category):  # put application's code here
+def render_words_category(category):
     con = create_connection(DATABASE)
-    query = "SELECT maori, english, category, definition, level FROM Dictionary WHERE category=?"
+    query = "SELECT maori, english, category, definition, level, editor FROM Dictionary WHERE category=?"
     cur = con.cursor()
     cur.execute(query, (category, ))
     definition_list = cur.fetchall()
@@ -90,10 +97,11 @@ def render_words_category(category):  # put application's code here
     print(definition_list)
     return render_template('words.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
 
+#displays an individual word after clicking on it from the grid
 @app.route('/<maori>')
 def render_words_maori(maori):  # put application's code here
     con = create_connection(DATABASE)
-    query = "SELECT maori, english, category, definition, level FROM Dictionary WHERE maori=?"
+    query = "SELECT maori, english, category, definition, level, image, editor FROM Dictionary WHERE maori=?"
     cur = con.cursor()
     cur.execute(query, (maori, ))
     definition_list = cur.fetchall()
@@ -105,6 +113,7 @@ def render_words_maori(maori):  # put application's code here
     print(definition_list)
     return render_template('maori.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
 
+#another oage for individual words that shows admin controls
 @app.route('/<maori>/admin')
 def render_words_maori_admin(maori):  # put application's code here
     con = create_connection(DATABASE)
@@ -120,6 +129,7 @@ def render_words_maori_admin(maori):  # put application's code here
     print(definition_list)
     return render_template('maori_admin.html', logged_in=is_logged_in(), definitions=definition_list, categories=category_list, is_teacher=is_teacher())
 
+#login page
 @app.route('/login', methods=['POST', 'GET'])
 def render_login():  # put application's code here
     if is_logged_in():
@@ -129,7 +139,7 @@ def render_login():  # put application's code here
         email = request.form['email'].strip().lower()
         password = request.form['password'].strip()
         print(email)
-        query = """SELECT id, fname, password, permission FROM user WHERE email = ?"""
+        query = """SELECT id, fname, lname, password, permission FROM user WHERE email = ?"""
         con = create_connection(DATABASE)
         cur = con.cursor()
         cur.execute(query, (email,))
@@ -139,8 +149,9 @@ def render_login():  # put application's code here
         try:
             user_id = user_data[0]
             first_name = user_data[1]
-            db_password = user_data[2]
-            permissions = user_data[3]
+            last_name = user_data[2]
+            db_password = user_data[3]
+            permissions = user_data[4]
         except IndexError:
             return redirect("/login?error=Email+or+invalid+password+incorrect")
 
@@ -149,8 +160,10 @@ def render_login():  # put application's code here
 
         session['email'] = email
         session['firstname'] = first_name
+        session['lastname'] = last_name
         session['user_id'] = user_id
         session['permissions'] = permissions
+
         print(session)
         return redirect('/')
     return render_template('login.html', is_teacher=is_teacher())
@@ -218,22 +231,6 @@ def admin():
     con.close()
     return render_template("admin.html", logged_in=is_logged_in(), categories=category_list, is_teacher=is_teacher())
 
-@app.route('/add_category', methods=['POST'])
-def add_category():
-    if not is_logged_in():
-        return redirect('/?message=need+to+be+logged+in')
-    if request.method == "POST":
-        print(request.form)
-        cat_name = request.form.get('name').lower().strip()
-        print(cat_name)
-        con = create_connection(DATABASE)
-        query = "INSERT INTO categories ('category') VALUES (?)"
-        cur = con.cursor()
-        cur.execute(query, (cat_name, ))
-        con.commit()
-        con.close()
-        return redirect("/admin")
-
 @app.route("/add_word", methods=['POST'])
 def add_word():
     if not is_logged_in():
@@ -245,11 +242,13 @@ def add_word():
         word_category = request.form.get('category')
         word_definition = request.form.get('definition')
         word_level = request.form.get('level')
-        print(word_maori, word_english, word_category, word_definition, word_level)
+        word_image = "noImage.jpg"
+        word_editor = session.get("firstname")
+        print(word_maori, word_english, word_category, word_definition, word_level,delete_word_confirm, word_editor)
         con = create_connection(DATABASE)
-        query = "INSERT INTO Dictionary (maori, english, category, definition, level) VALUES (?, ?, ?, ?, ?)"
+        query = "INSERT INTO Dictionary (maori, english, category, definition, level, image, editor) VALUES (?, ?, ?, ?, ?, ?, ?)"
         cur = con.cursor()
-        cur.execute(query, (word_maori, word_english, word_category, word_definition, word_level))
+        cur.execute(query, (word_maori, word_english, word_category, word_definition, word_level, word_image, word_editor))
         con.commit()
         con.close()
         return redirect("/admin")
@@ -283,6 +282,47 @@ def delete_word_confirm(maori):
     print(maori)
     print(temp_word_id)
     return redirect("/words")
+
+@app.route('/add_category', methods=['POST'])
+def add_category():
+    if not is_logged_in():
+        return redirect('/?message=need+to+be+logged+in')
+    if request.method == "POST":
+        print(request.form)
+        category = request.form.get('name').lower().strip()
+        print(category)
+        con = create_connection(DATABASE)
+        query = "INSERT INTO categories ('category') VALUES (?)"
+        cur = con.cursor()
+        cur.execute(query, (category, ))
+        con.commit()
+        con.close()
+        return redirect("/admin")
+
+@app.route('/delete_category', methods=['POST'])
+def delete_category():
+    if not is_logged_in():
+        return redirect('/?message=need+to+be+logged+in')
+    if request.method == "POST":
+        category = request.form.get('cat_id')
+        print(category)
+        category = category.split(", ")
+        cat_id = category[0]
+        cat_name = category[1]
+        return render_template("delete_cat_confirm.html", id=cat_id, name=cat_name, type="category")
+    return redirect("/admin")
+
+@app.route('/delete_category_confirm/<id>')
+def delete_category_confirm(id):
+    if not is_logged_in():
+        return redirect('/?message=need+to+be+logged+in')
+    con = create_connection(DATABASE)
+    query = "DELETE FROM categories WHERE id = ?"
+    cur = con.cursor()
+    cur.execute(query, (id, ))
+    con.commit()
+    con.close()
+    return redirect("/admin")
 
 if __name__ == '__main__':
     app.run()

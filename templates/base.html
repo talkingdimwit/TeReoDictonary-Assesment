@@ -15,16 +15,16 @@
 	<div class="navigation-container" id="myNav">
 		<button onclick="closeNav()">×</button>
 		<a href="/">Home</a>
-		<a href="/words">Category</a>
+		<a href="/words">Dictionary</a>
 		{% if logged_in %}
-            <a href="/logout">logout</a>
+            <a href="/logout">Logout</a>
             {% if is_teacher %}
-                <a href="/admin">admin</a>
+                <a href="/admin">Admin</a>
             {% else %}
-                <a href="/student">student info</a>
+                <a href="/student">Student info</a>
             {% endif %}
         {% else %}
-            <a href="/login">login</a>
+            <a href="/login">Login</a>
         {% endif %}
 
         <script>

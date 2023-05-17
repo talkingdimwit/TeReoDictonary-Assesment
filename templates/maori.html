@@ -19,8 +19,9 @@
                     <p class="category">{{ words[2] }}</p>
                     <p class="definition">{{ words[3] }}</p>
                     <p class="year-level">{{ words[4] }}</p>
+                    <p class="editor">LAST EDIT : {{ words[6] }}</p>
                     <div class="word-image">
-                        <img src="static/images/noImage.jpg" height="100%" width="100%">
+                        <img src="static/images/{{ words[5] }}" height="100%" width="100%">
                     </div>
                 </div>
     {% endfor %}
