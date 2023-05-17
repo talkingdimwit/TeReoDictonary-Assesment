@@ -8,28 +8,28 @@
 <h4>add a word</h4>
 <form class="myform" method="post" action="/add_word">
     <div class="login-input">
-        <div class="form-label"><label for="name">Maori Name:</label></div>
-        <div class="form-element"><input type="text" name="name" id="name" required></div>
+        <div class="form-label"><label for="maori">Maori Name:</label></div>
+        <div class="form-element"><input type="text" name="maori" id="maori" required></div>
     </div>
     <div class="login-input">
-        <div class="form-label"><label for="name">english Name:</label></div>
-        <div class="form-element"><input type="text" name="name" id="name" required></div>
+        <div class="form-label"><label for="english">english Name:</label></div>
+        <div class="form-element"><input type="text" name="english" id="english" required></div>
     </div>
     <div class="login-input">
-        <div class="form-label"><label for="name">category:</label></div>
-            <select id="cat_id" name="cat_id">
+        <div class="form-label"><label for="category">category:</label></div>
+            <select id="category" name="category">
                 {% for category in categories %}
-                <option value="{{ category[0] }}, {{ category[1] }}">{{ category[1] }}</option>
+                <option value="{{ category[1] }}">{{ category[1] }}</option>
                 {% endfor %}
             </select>
     </div>
     <div class="login-input">
-        <div class="form-label"><label for="name">definition:</label></div>
-        <div class="form-element"><input type="text" name="name" id="name" required></div>
+        <div class="form-label"><label for="definition">definition:</label></div>
+        <div class="form-element"><input type="text" name="definition" id="definition" required></div>
     </div>
     <div class="login-input">
-        <div class="form-label"><label for="name">year level:</label></div>
-        <div class="form-element"><input type="text" name="name" id="name" required></div>
+        <div class="form-label"><label for="level">year level:</label></div>
+        <div class="form-element"><input type="text" name="level" id="level" required></div>
     </div>
     <div class="login-input">
         <div class="form-label"></div>

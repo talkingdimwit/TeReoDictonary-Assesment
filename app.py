@@ -3,9 +3,9 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-DATABASE = 'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
+DATABASE = "C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
+#'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
 #
-#"C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -234,6 +234,25 @@ def add_category():
         con.close()
         return redirect("/admin")
 
+@app.route("/add_word", methods=['POST'])
+def add_word():
+    if not is_logged_in():
+        redirect('/?message=need+to+be+logged+in')
+    if request.method == "POST":
+        print(request.form)
+        word_maori = request.form.get('maori')
+        word_english = request.form.get('english')
+        word_category = request.form.get('category')
+        word_definition = request.form.get('definition')
+        word_level = request.form.get('level')
+        print(word_maori, word_english, word_category, word_definition, word_level)
+        con = create_connection(DATABASE)
+        query = "INSERT INTO Dictionary (maori, english, category, definition, level) VALUES (?, ?, ?, ?, ?)"
+        cur = con.cursor()
+        cur.execute(query, (word_maori, word_english, word_category, word_definition, word_level))
+        con.commit()
+        con.close()
+        return redirect("/admin")
 @app.route('/delete_word/<maori>', methods=['POST'])
 def delete_word(maori):
     if not is_logged_in():
