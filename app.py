@@ -2,10 +2,11 @@ from flask import Flask, render_template, redirect, request, session
 import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
+from datetime import date
 
-DATABASE = 'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
+DATABASE = "C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
+#'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
 #
-#"C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -54,7 +55,7 @@ def render_homepage():  # put application's code here
 @app.route('/search', methods=['GET', 'POST'])
 def render_search():
     search = request.form['search'] #grabs requested search from user
-    query = "SELECT maori, english, category, definition, level FROM Dictionary WHERE maori like ? OR english like ?  OR category like ? OR definition like ?  OR level like ?"
+    query = "SELECT maori, english, category, definition, level, editor, date FROM Dictionary WHERE maori like ? OR english like ?  OR category like ? OR definition like ?  OR level like ?"
     search = "%" + search + "%"
     #above is the code checking the database for where is has to look
     con = create_connection(DATABASE)
@@ -69,7 +70,7 @@ def render_search():
 @app.route('/words')
 def render_words():  # put application's code here
     con = create_connection(DATABASE)
-    query = "SELECT maori, english, category, definition, level, editor FROM Dictionary" #grabing word information
+    query = "SELECT maori, english, category, definition, level, editor, date FROM Dictionary" #grabing word information
     cur = con.cursor()
     cur.execute(query)
     definition_list = cur.fetchall()
@@ -85,7 +86,7 @@ def render_words():  # put application's code here
 @app.route('/words/<category>')
 def render_words_category(category):
     con = create_connection(DATABASE)
-    query = "SELECT maori, english, category, definition, level, editor FROM Dictionary WHERE category=?" #the WHERE category=? is makeing it so only whatever category is = to is getting grabed by the database
+    query = "SELECT maori, english, category, definition, level, editor, date FROM Dictionary WHERE category=?" #the WHERE category=? is makeing it so only whatever category is = to is getting grabed by the database
     cur = con.cursor()
     cur.execute(query, (category, ))
     definition_list = cur.fetchall()
@@ -101,7 +102,7 @@ def render_words_category(category):
 @app.route('/<maori>')
 def render_words_maori(maori):  # put application's code here
     con = create_connection(DATABASE)
-    query = "SELECT maori, english, category, definition, level, image, editor FROM Dictionary WHERE maori=?"
+    query = "SELECT maori, english, category, definition, level, image, editor, date FROM Dictionary WHERE maori=?"
     cur = con.cursor()
     cur.execute(query, (maori, ))
     definition_list = cur.fetchall()
@@ -196,15 +197,15 @@ def render_signup_page():  # put application's code here
             return redirect("\signup?error=Password+do+not+match")
 
         if len(fname) > 20:
-            return redirect("\signup?error=fname+must+be+at+less+than+20+characters")
+            return redirect("\signup?error=fname+must+be+less+than+20+characters")
         if len(lname) > 20:
-            return redirect("\signup?error=lname+must+be+at+less+than+20+characters")
+            return redirect("\signup?error=lname+must+be+less+than+20+characters")
         if len(email) > 320:
-            return redirect("\signup?error=email+must+be+at+less+than+320+characters")
+            return redirect("\signup?error=email+must+be+less+than+320+characters")
         if len(password) < 8:
             return redirect("\signup?error=Password+must+be+at+least+8+characters")
         if len(password) > 20:
-            return redirect("\signup?error=Password+must+be+at+less+than+20+characters")
+            return redirect("\signup?error=Password+must+be+less+than+20+characters")
 
 
         hashed_password = bcrypt.generate_password_hash(password)
@@ -254,6 +255,7 @@ def add_word():
         redirect('/?message=need+to+be+logged+in')
     if request.method == "POST":
         print(request.form)
+        today = date.today()
         #request.form.get is grabing the inputs from the html pages given by the user
         word_maori = request.form.get('maori')
         word_english = request.form.get('english')
@@ -262,12 +264,21 @@ def add_word():
         word_level = request.form.get('level')
         word_image = "noImage.jpg"
         word_editor = session.get("firstname")
-        print(word_maori, word_english, word_category, word_definition, word_level,delete_word_confirm, word_editor)
+        word_date = today
+        if len(word_maori) > 20:
+            return redirect("/admin?error=maori+word+must+be+less+than+20+characters")
+        if len(word_english) > 20:
+            return redirect("/admin?error=english+word+must+be+less+than+20+characters")
+        if len(word_definition) > 100:
+            return redirect("/admin?error=lname+must+be+less+than+100+characters")
+
+        print(word_maori, word_english, word_category, word_definition, word_level,delete_word_confirm, word_editor, word_date)
+
         con = create_connection(DATABASE)
         #inserts all varibles given by user into the dictionary makeing a word
-        query = "INSERT INTO Dictionary (maori, english, category, definition, level, image, editor) VALUES (?, ?, ?, ?, ?, ?, ?)"
+        query = "INSERT INTO Dictionary (maori, english, category, definition, level, image, editor, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         cur = con.cursor()
-        cur.execute(query, (word_maori, word_english, word_category, word_definition, word_level, word_image, word_editor))
+        cur.execute(query, (word_maori, word_english, word_category, word_definition, word_level, word_image, word_editor, word_date))
         con.commit()
         con.close()
         return redirect("/admin")
@@ -314,6 +325,8 @@ def add_category():
         print(request.form)
         category = request.form.get('name').lower().strip()
         print(category)
+        if len(category) > 20:
+            return redirect("/admin?error=category+must+be+less+than+20+characters")
         con = create_connection(DATABASE)
         query = "INSERT INTO categories ('category') VALUES (?)"
         cur = con.cursor()
