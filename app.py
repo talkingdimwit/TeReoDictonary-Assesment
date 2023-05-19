@@ -126,7 +126,7 @@ def render_words_maori(maori):  # put application's code here
 @app.route('/<maori>/admin')
 def render_words_maori_admin(maori):  # put application's code here
     con = create_connection(DATABASE)
-    query = "SELECT maori, english, category, definition, level FROM Dictionary WHERE maori=?"
+    query = "SELECT maori, english, category, definition, level, image, editor, date FROM Dictionary WHERE maori=?"
     cur = con.cursor()
     cur.execute(query, (maori, ))
     definition_list = cur.fetchall()

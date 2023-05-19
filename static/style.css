@@ -140,7 +140,7 @@
 			flex-wrap: wrap;
 			justify-content: space-evenly;
 		  	align-items: stretch;
-			width: calc(33.33%);
+			width: calc(20%);
 			float: left;
 		}
 
