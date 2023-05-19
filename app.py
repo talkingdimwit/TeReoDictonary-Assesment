@@ -3,9 +3,9 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-DATABASE = "C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
-#'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
+DATABASE = 'C:/Users/19037/PycharmProjects/TeReoDictonary-Assesment/TeReo'
 #
+#"C:/Users/maxmo/PycharmProjects/TeReoDictonary-Assesment/TeReo"
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -195,8 +195,17 @@ def render_signup_page():  # put application's code here
         if password != password2:
             return redirect("\signup?error=Password+do+not+match")
 
+        if len(fname) > 20:
+            return redirect("\signup?error=fname+must+be+at+less+than+20+characters")
+        if len(lname) > 20:
+            return redirect("\signup?error=lname+must+be+at+less+than+20+characters")
+        if len(email) > 320:
+            return redirect("\signup?error=email+must+be+at+less+than+320+characters")
         if len(password) < 8:
             return redirect("\signup?error=Password+must+be+at+least+8+characters")
+        if len(password) > 20:
+            return redirect("\signup?error=Password+must+be+at+less+than+20+characters")
+
 
         hashed_password = bcrypt.generate_password_hash(password)
         con = create_connection(DATABASE)
@@ -271,10 +280,10 @@ def delete_word(maori):
     if request.method == "POST":
         maori = maori
         con = create_connection(DATABASE)
-        query = "SELECT id, maori FROM Dictionary WHERE maori=?" #this is grabing the primary key for the word to prepare to delete it
+        query = "SELECT id FROM Dictionary WHERE maori=?" #this is grabing the primary key for the word to prepare to delete it
         cur = con.cursor()
         cur.execute(query, (maori,))
-        word = cur.fetchall()
+        word = cur.fetchone()
         con.close()
         return render_template("delete_confirm.html", word=word)
     return redirect("/admin")
@@ -286,7 +295,7 @@ def delete_word_confirm(maori):
         return redirect('/?message=need+to+be+logged+in')
     con = create_connection(DATABASE)
     query = "DELETE FROM Dictionary WHERE id = ?" #deletes the priamry key given by the last page only
-    temp_word_id = maori[1]
+    temp_word_id = int(maori)
     cur = con.cursor()
     cur.execute(query, (temp_word_id, ))
     con.commit()
