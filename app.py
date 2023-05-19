@@ -54,17 +54,25 @@ def render_homepage():  # put application's code here
 #after using search bar on home page this runs
 @app.route('/search', methods=['GET', 'POST'])
 def render_search():
-    search = request.form['search'] #grabs requested search from user
+    search = request.form['search']  # grabs requested search from user
     query = "SELECT maori, english, category, definition, level, editor, date FROM Dictionary WHERE maori like ? OR english like ?  OR category like ? OR definition like ?  OR level like ?"
+    # SQL query to retrieve data from the 'Dictionary' table based on search criteria
     search = "%" + search + "%"
-    #above is the code checking the database for where is has to look
+    # Modifying the search term to match partial matches in the database
     con = create_connection(DATABASE)
+    # Establishing a connection to the database
     cur = con.cursor()
+    # Creating a cursor object to interact with the database
     cur.execute(query, (search, search, search, search, search))
+    # Executing the SQL query with the search terms
     definition_list = cur.fetchall()
+    # Fetching all the matching rows from the query result
     con.close()
+    # Closing the database connection
     print(definition_list)
+    # Printing the list of definitions (for debugging or logging purposes)
     return render_template('search.html', logged_in=is_logged_in(), definitions=definition_list, is_teacher=is_teacher())
+    # Rendering the 'search.html' template with the search results and other variables to be used in the template
 
 #page that displays grid of words
 @app.route('/words')
@@ -135,19 +143,28 @@ def render_words_maori_admin(maori):  # put application's code here
 def render_login():  # put application's code here
     if is_logged_in():
         return redirect('/')
+    # If the user is already logged in, redirect them to the home page
     print("logging in")
-    if request.method == "POST": #POST means that we will be sending data to the database
+    # Print a debug message indicating that the login process has started
+    if request.method == "POST":
+        # If the request method is POST (data is being submitted to the server)
+
         email = request.form['email'].strip().lower()
+        # Get the email entered by the user from the form and remove any leading/trailing whitespaces, convert to lowercase
         password = request.form['password'].strip()
+        # Get the password entered by the user from the form and remove any leading/trailing whitespaces
         print(email)
+        # Print the email (for debugging purposes)
+
         query = """SELECT id, fname, lname, password, permission FROM user WHERE email = ?"""
         con = create_connection(DATABASE)
         cur = con.cursor()
         cur.execute(query, (email,))
         user_data = cur.fetchone()
+        # Fetching the first row (user data) from the query result
         con.close
 
-        #checks that the email and password that were intered match with the one held in the database
+        # Checks if the email and password match the ones stored in the database
         try:
             user_id = user_data[0]
             first_name = user_data[1]
@@ -156,19 +173,23 @@ def render_login():  # put application's code here
             permissions = user_data[4]
         except IndexError:
             return redirect("/login?error=Email+or+invalid+password+incorrect")
+            # If the user is not found in the database, redirect them to the login page with an error message
 
-        if not bcrypt.check_password_hash(db_password, password): #does a double check on the password checking if it matchs the incripted one held in the database
+        if not bcrypt.check_password_hash(db_password, password):
             return redirect(request.referrer, "?error=Email+or+invalid+password+inncorrect")
+            # If the provided password doesn't match the hashed password stored in the database, redirect with an error message
 
-        # this is storeing the user info server side and not in the database so we can easily grabed it as they are logged in
+        # Store user information in the server-side session for easy access during the user's session
         session['email'] = email
         session['firstname'] = first_name
         session['lastname'] = last_name
         session['user_id'] = user_id
         session['permissions'] = permissions
-
         print(session)
+        # Print the session data (for debugging purposes)
+
         return redirect('/')
+        # Redirect the user to the home page after successful login
     return render_template('login.html', is_teacher=is_teacher())
 
 #page to make account
@@ -192,10 +213,11 @@ def render_signup_page():  # put application's code here
             permission = 'student'
         else:
             return redirect("\signup?error=Teacher+code+incorrect")
+            # If the provided teacher code is incorrect, redirect with an error message
 
         if password != password2:
             return redirect("\signup?error=Password+do+not+match")
-
+            # if seoond password do not match redirect with an error message
         if len(fname) > 20:
             return redirect("\signup?error=fname+must+be+less+than+20+characters")
         if len(lname) > 20:
@@ -206,7 +228,7 @@ def render_signup_page():  # put application's code here
             return redirect("\signup?error=Password+must+be+at+least+8+characters")
         if len(password) > 20:
             return redirect("\signup?error=Password+must+be+less+than+20+characters")
-
+        #checks that all inputs are in the boundarys of the database
 
         hashed_password = bcrypt.generate_password_hash(password)
         con = create_connection(DATABASE)
